@@ -75,7 +75,7 @@
                 const value = option[this.props[prop] || prop];
                 if (value !== undefined) option[prop] = value;
               });
-              if (Array.isArray(option.children)) {
+              if (Array.isArray(option.children) && option.children.length !== 0){
                 formatOptions(option.children);
               }
             });

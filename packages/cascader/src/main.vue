@@ -203,12 +203,12 @@ export default {
     currentLabels() {
       let options = this.options;
       let labels = [];
-      
+
       this.currentValue.forEach(value => {
         const targetOption = options && options.filter(option => option[this.valueKey] === value)[0];
         if (targetOption) {
           labels.push(targetOption[this.labelKey]);
-          if(targetOption[this.childrenKey].length!=0){
+          if (targetOption[this.childrenKey].length !== 0) {
             options = targetOption[this.childrenKey];
           }
         }
