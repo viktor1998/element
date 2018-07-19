@@ -2,7 +2,6 @@
   import { isDef } from 'element-ui/src/utils/shared';
   import scrollIntoView from 'element-ui/src/utils/scroll-into-view';
   import { generateId } from 'element-ui/src/utils/util';
-
   const copyArray = (arr, props) => {
     if (!arr || !Array.isArray(arr) || !props) return arr;
     const result = [];
@@ -19,17 +18,15 @@
         }
         if (value !== undefined) itemCopy[name] = value;
       });
-      if (Array.isArray(item[childrenProp]) && item[childrenProp].length!=0) {
+      if (Array.isArray(item[childrenProp]) && item[childrenProp].length !== 0) {
         itemCopy[childrenProp] = copyArray(item[childrenProp], props);
       }
       result.push(itemCopy);
     });
     return result;
   };
-
   export default {
     name: 'ElCascaderMenu',
-
     data() {
       return {
         inputWidth: 0,
@@ -46,7 +43,6 @@
         id: generateId()
       };
     },
-
     watch: {
       visible(value) {
         if (value) {
@@ -60,14 +56,12 @@
         }
       }
     },
-
     computed: {
       activeOptions: {
         cache: false,
         get() {
           const activeValue = this.activeValue;
           const configurableProps = ['label', 'value', 'children', 'disabled'];
-
           const formatOptions = options => {
             options.forEach(option => {
               if (option.__IS__FLAT__OPTIONS) return;
@@ -75,32 +69,29 @@
                 const value = option[this.props[prop] || prop];
                 if (value !== undefined) option[prop] = value;
               });
-              if (Array.isArray(option.children) && option.children.length !== 0){
+              if (Array.isArray(option.children) && option.children.length !== 0) {
                 formatOptions(option.children);
               }
             });
           };
-
           const loadActiveOptions = (options, activeOptions = []) => {
             const level = activeOptions.length;
             activeOptions[level] = options;
             let active = activeValue[level];
             if (isDef(active)) {
               options = options.filter(option => option.value === active)[0];
-              if (options && options.children) {
+              if (options && options.children && options.children.length !== 0) {
                 loadActiveOptions(options.children, activeOptions);
               }
             }
             return activeOptions;
           };
-
           const optionsCopy = copyArray(this.options, this.props);
           formatOptions(optionsCopy);
           return loadActiveOptions(optionsCopy);
         }
       }
     },
-
     methods: {
       select(item, menuIndex) {
         if (item.__IS__FLAT__OPTIONS) {
@@ -132,7 +123,6 @@
         this.$nextTick(() => this.$refs.menus.forEach(menu => this.scrollMenu(menu)));
       }
     },
-
     render(h) {
       const {
         activeValue,
@@ -144,7 +134,6 @@
       } = this;
       let itemId = null;
       let itemIndex = 0;
-
       let hoverMenuRefs = {};
       const hoverMenuHandler = e => {
         const activeMenu = hoverMenuRefs.activeMenu;
@@ -152,13 +141,11 @@
         const offsetX = e.offsetX;
         const width = activeMenu.offsetWidth;
         const height = activeMenu.offsetHeight;
-
         if (e.target === hoverMenuRefs.activeItem) {
           clearTimeout(this.hoverTimer);
           const {activeItem} = hoverMenuRefs;
           const offsetY_top = activeItem.offsetTop;
           const offsetY_Bottom = offsetY_top + activeItem.offsetHeight;
-
           hoverMenuRefs.hoverZone.innerHTML = `
             <path style="pointer-events: auto;" fill="transparent" d="M${offsetX} ${offsetY_top} L${width} 0 V${offsetY_top} Z" />
             <path style="pointer-events: auto;" fill="transparent" d="M${offsetX} ${offsetY_Bottom} L${width} ${height} V${offsetY_Bottom} Z" />
@@ -171,7 +158,6 @@
           }
         }
       };
-
       const menus = this._l(activeOptions, (menu, menuIndex) => {
         let isFlat = false;
         const menuId = `menu-${this.id}-${ menuIndex}`;
@@ -180,9 +166,7 @@
           const events = {
             on: {}
           };
-
           if (item.__IS__FLAT__OPTIONS) isFlat = true;
-
           if (!item.disabled) {
             // keydown up/down/left/right/enter
             events.on.keydown = (ev) => {
@@ -291,18 +275,15 @@
         if (isFlat) {
           menuStyle.minWidth = this.inputWidth + 'px';
         }
-
         const isHoveredMenu = expandTrigger === 'hover' && activeValue.length - 1 === menuIndex;
         const hoverMenuEvent = {
           on: {
           }
         };
-
         if (isHoveredMenu) {
           hoverMenuEvent.on.mousemove = hoverMenuHandler;
           menuStyle.position = 'relative';
         }
-
         return (
           <ul
             class={{
@@ -334,15 +315,12 @@
           </ul>
         );
       });
-
       if (expandTrigger === 'hover') {
         this.$nextTick(() => {
           const activeItem = this.$refs.activeItem;
-
           if (activeItem) {
             const activeMenu = activeItem.parentElement;
             const hoverZone = this.$refs.hoverZone;
-
             hoverMenuRefs = {
               activeMenu,
               activeItem,
@@ -353,7 +331,6 @@
           }
         });
       }
-
       return (
         <transition name="el-zoom-in-top" on-before-enter={this.handleMenuEnter} on-after-leave={this.handleMenuLeave}>
           <div

@@ -71,7 +71,6 @@ import Locale from 'element-ui/src/mixins/locale';
 import { t } from 'element-ui/src/locale';
 import debounce from 'throttle-debounce/debounce';
 import { generateId } from 'element-ui/src/utils/util';
-
 const popperMixin = {
   props: {
     placement: {
@@ -88,14 +87,10 @@ const popperMixin = {
   data: Popper.data,
   beforeDestroy: Popper.beforeDestroy
 };
-
 export default {
   name: 'ElCascader',
-
   directives: { Clickoutside },
-
   mixins: [popperMixin, emitter, Locale],
-
   inject: {
     elForm: {
       default: ''
@@ -104,11 +99,9 @@ export default {
       default: ''
     }
   },
-
   components: {
     ElInput
   },
-
   props: {
     options: {
       type: Array,
@@ -171,7 +164,6 @@ export default {
       default: 500
     }
   },
-
   data() {
     return {
       currentValue: this.value || [],
@@ -186,7 +178,6 @@ export default {
       isOnComposition: false
     };
   },
-
   computed: {
     labelKey() {
       return this.props.label || 'label';
@@ -203,12 +194,11 @@ export default {
     currentLabels() {
       let options = this.options;
       let labels = [];
-
       this.currentValue.forEach(value => {
         const targetOption = options && options.filter(option => option[this.valueKey] === value)[0];
         if (targetOption) {
           labels.push(targetOption[this.labelKey]);
-          if (targetOption[this.childrenKey].length !== 0) {
+          if (Array.isArray(targetOption[this.childrenKey]) && targetOption[this.childrenKey].length !== 0) {
             options = targetOption[this.childrenKey];
           }
         }
@@ -229,7 +219,6 @@ export default {
       return !this.filterable || (!isIE && !this.menuVisible);
     }
   },
-
   watch: {
     menuVisible(value) {
       this.$refs.input.$refs.input.setAttribute('aria-expanded', value);
@@ -256,7 +245,6 @@ export default {
       }
     }
   },
-
   methods: {
     initMenu() {
       this.menu = new Vue(ElCascaderMenu).$mount();
@@ -277,7 +265,6 @@ export default {
       if (!this.menu) {
         this.initMenu();
       }
-
       this.menu.value = this.currentValue.slice(0);
       this.menu.visible = true;
       this.menu.options = this.options;
@@ -322,7 +309,6 @@ export default {
       this.currentValue = value;
       this.$emit('input', value);
       this.$emit('change', value);
-
       if (close) {
         this.menuVisible = false;
       } else {
@@ -332,17 +318,14 @@ export default {
     handleInputChange(value) {
       if (!this.menuVisible) return;
       const flatOptions = this.flatOptions;
-
       if (!value) {
         this.menu.options = this.options;
         this.$nextTick(this.updatePopper);
         return;
       }
-
       let filteredFlatOptions = flatOptions.filter(optionsStack => {
         return optionsStack.some(option => new RegExp(value, 'i').test(option[this.labelKey]));
       });
-
       if (filteredFlatOptions.length > 0) {
         filteredFlatOptions = filteredFlatOptions.map(optionStack => {
           return {
@@ -424,11 +407,9 @@ export default {
       this.isOnComposition = event.type !== 'compositionend';
     }
   },
-
   created() {
     this.debouncedInputChange = debounce(this.debounce, value => {
       const before = this.beforeFilter(value);
-
       if (before && before.then) {
         this.menu.options = [{
           __IS__FLAT__OPTIONS: true,
@@ -449,7 +430,6 @@ export default {
       }
     });
   },
-
   mounted() {
     this.flatOptions = this.flattenOptions(this.options);
   }
