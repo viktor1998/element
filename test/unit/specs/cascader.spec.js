@@ -25,10 +25,7 @@ describe('Cascader', () => {
             children: [{
               value: 'hangzhou',
               label: 'Hangzhou',
-              children: [{
-                value: 'xihu',
-                label: 'West Lake'
-              }]
+              children: []
             }, {
               value: 'ningbo',
               label: 'NingBo',

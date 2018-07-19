@@ -19,19 +19,7 @@
           children: [{
             value: 'disciplines',
             label: 'Disciplines',
-            children: [{
-              value: 'consistency',
-              label: 'Consistency'
-            }, {
-              value: 'feedback',
-              label: 'Feedback'
-            }, {
-              value: 'efficiency',
-              label: 'Efficiency'
-            }, {
-              value: 'controllability',
-              label: 'Controllability'
-            }]
+            children: []
           }, {
             value: 'navigation',
             label: 'Navigation',

@@ -80,7 +80,7 @@
             let active = activeValue[level];
             if (isDef(active)) {
               options = options.filter(option => option.value === active)[0];
-              if (options && options.children && options.children.length !== 0) {
+              if (options && options.children) {
                 loadActiveOptions(options.children, activeOptions);
               }
             }
